@@ -5,6 +5,7 @@
 name: http3-linux
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master

@@ -5,6 +5,7 @@
 name: curl-for-win
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master

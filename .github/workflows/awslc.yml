@@ -5,6 +5,7 @@
 name: Linux AWS-LC
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master

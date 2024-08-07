@@ -5,6 +5,7 @@
 name: Codespell
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
