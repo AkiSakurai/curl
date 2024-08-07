@@ -7,6 +7,7 @@ name: badwords
 on:
   # Trigger the workflow on push or pull requests, but only for the
   # master branch
+  workflow_dispatch:
   push:
     branches:
       - master

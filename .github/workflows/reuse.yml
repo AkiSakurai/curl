@@ -6,6 +6,7 @@
 name: REUSE compliance
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master

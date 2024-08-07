@@ -6,6 +6,7 @@ name: Hacktoberfest
 
 on:
   # this must not ever run on any other branch than master
+  workflow_dispatch:
   push:
     branches:
       - master

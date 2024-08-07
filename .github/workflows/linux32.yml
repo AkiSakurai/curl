@@ -5,6 +5,7 @@
 name: Linux 32-bit
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
