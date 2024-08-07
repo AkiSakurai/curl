@@ -103,6 +103,7 @@ use testutil qw(
     runclient
     shell_quote
     subbase64
+    subsha256base64file
     subnewlines
     );
 use valgrind;
@@ -364,6 +365,7 @@ sub prepro {
             }
             subvariables(\$s, $testnum, "%");
             subbase64(\$s);
+            subsha256base64file(\$s);
             subnewlines(0, \$s) if($data_crlf);
             push @out, $s;
         }

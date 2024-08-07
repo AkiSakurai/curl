@@ -36,6 +36,7 @@ add_subdirectory(http/clients)
 add_subdirectory(server)
 add_subdirectory(libtest)
 add_subdirectory(unit)
+add_subdirectory(certs)
 
 function(add_runtests _targetname _test_flags)
   # Use a special '$TFLAGS' placeholder as last argument which will be
