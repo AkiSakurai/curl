@@ -152,7 +152,7 @@ jobs:
         # while running the tests, for example
         # https://github.com/curl/curl/runs/4095721123?check_suite_focus=true
         run: |
-          echo libtool autoconf automake pkg-config libpsl libssh2 nghttp2 openssl ${{ matrix.install }} | xargs -Ix -n1 echo brew '"x"' > /tmp/Brewfile
+          echo libtool autoconf automake pkg-config libpsl libssh2 nghttp2 openssl stunnel ${{ matrix.install }} | xargs -Ix -n1 echo brew '"x"' > /tmp/Brewfile
           while [[ $? == 0 ]]; do for i in 1 2 3; do brew update && brew bundle install --no-lock --file /tmp/Brewfile && break 2 || { echo Error: wait to try again; sleep 10; } done; false Too many retries; done
 
       - name: 'brew unlink openssl'
@@ -234,6 +234,11 @@ jobs:
           echo '::group::raw'; cat bld/lib/curl_config.h || true; echo '::endgroup::'
           cat bld/lib/curl_config.h | grep -F '#define' | sort || true
 
+      - name: 'build-cert'
+        run: |
+          make -C bld/tests/certs V=1 clean-certs
+          make -C bld/tests/certs V=1 build-certs -j1
+
       - name: 'make'
         run: make -C bld V=1
 
@@ -258,6 +263,9 @@ jobs:
             else
               TFLAGS+=' ~2402 ~2404'  # non-SecureTransport + nghttp2
             fi
+          fi
+          if [[ '${{ matrix.configure }}' = *'--with-secure-transport'* ]]; then
+            TFLAGS+=' ~313'   # SecureTransport does not support crl file
           fi
           rm -f $HOME/.curlrc
           make -C bld V=1 test-ci
@@ -292,9 +300,9 @@ jobs:
             install: wolfssl
             generate: -DCURL_USE_WOLFSSL=ON -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON
             macos-version-min: '10.15'
-          - name: 'GnuTLS !ldap'
-            install: gnutls nettle
-            generate: -DCURL_USE_GNUTLS=ON -DCURL_USE_OPENSSL=OFF -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON
+          - name: 'GnuTLS !ldap krb5'
+            install: gnutls nettle krb5
+            generate: -DCURL_USE_GNUTLS=ON -DCURL_USE_OPENSSL=OFF -DCURL_USE_GSSAPI=ON -DGSS_ROOT_DIR=$(brew --prefix krb5) -DCURL_DISABLE_LDAP=ON -DCURL_DISABLE_LDAPS=ON
             macos-version-min: '10.15'
         exclude:
           - { compiler: llvm@15, build: { macos-version-min: '10.15' } }
@@ -302,7 +310,7 @@ jobs:
     steps:
       - name: 'brew install'
         run: |
-          echo libtool autoconf automake pkg-config libpsl libssh2 nghttp2 openssl ${{ matrix.build.install }} | xargs -Ix -n1 echo brew '"x"' > /tmp/Brewfile
+          echo libtool autoconf automake pkg-config libpsl libssh2 nghttp2 openssl stunnel ${{ matrix.build.install }} | xargs -Ix -n1 echo brew '"x"' > /tmp/Brewfile
           while [[ $? == 0 ]]; do for i in 1 2 3; do brew update && brew bundle install --no-lock --file /tmp/Brewfile && break 2 || { echo Error: wait to try again; sleep 10; } done; false Too many retries; done
 
       - name: 'brew unlink openssl'
@@ -357,6 +365,11 @@ jobs:
           echo '::group::raw'; cat bld/lib/curl_config.h || true; echo '::endgroup::'
           cat bld/lib/curl_config.h | grep -F '#define' | sort || true
 
+      - name: 'build-cert'
+        run: |
+          make -C bld V=1 clean-certs
+          make -C bld V=1 build-certs -j1
+
       - name: 'cmake build'
         run: make -C bld VERBOSE=1
 
@@ -378,6 +391,9 @@ jobs:
             else
               TFLAGS+=' ~2402 ~2404'  # non-SecureTransport + nghttp2
             fi
+          fi
+          if [[ '${{ matrix.build.generate }}' = *'-DCURL_USE_SECTRANSP=ON'* ]]; then
+            TFLAGS+=' ~313'   # SecureTransport does not support crl file
           fi
           rm -f $HOME/.curlrc
           make -C bld test-ci
