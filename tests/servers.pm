@@ -2575,6 +2575,14 @@ sub startservers {
                     return ("failed stopping unresponsive HTTP server", 3);
                 }
             }
+            if($run{'https'} &&
+               !responsive_http_server("https", $verbose, 0,
+                                       protoport('https'))) {
+                logmsg "* restarting unresponsive HTTPS server\n";
+                if(stopserver('https')) {
+                    return ("failed stopping unresponsive HTTPS server", 3);
+                }
+            }
             if(!$run{'http'}) {
                 ($serr, $pid, $pid2, $PORT{'http'}) =
                     runhttpserver("http", $verbose, 0);
