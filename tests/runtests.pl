@@ -367,7 +367,12 @@ sub cleardir {
             }
             else {
                 # Ignore stunnel since we cannot do anything about its locks
-                if(!unlink("$dir/$file") && "$file" !~ /_stunnel\.log$/) {
+                my $old_name = "$file" =~ /\.old$/ ? $file : "$file.old"; 
+                if("$file" =~ /^(cmd|file|download|test|stdout|stderr|trace|curl|([0-9]+))/) {
+                    if(!unlink("$dir/$file")) {
+                        $done = 0;
+                    }
+                } elsif("$file" !~ /_stunnel\.log$/ && !rename("$dir/$file", "$dir/$old_name")) {
                     $done = 0;
                 }
             }
@@ -1885,7 +1890,7 @@ sub singletest {
         }
         logmsg $logs;
         updatetesttimings($testnum, %$testtimings);
-        if($error == -2) {
+        if(defined $error && $error == -2) {
             if($postmortem) {
                 # Error indicates an actual problem starting the server, so
                 # display the server logs
