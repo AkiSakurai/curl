@@ -2326,8 +2326,9 @@ sub startservers {
            ($what eq "ftp") ||
            ($what eq "imap") ||
            ($what eq "smtp")) {
-            if($torture && $run{$what} &&
+            if($run{$what} &&
                !responsive_pingpong_server($what, "", $verbose)) {
+                logmsg "* restarting unresponsive $what server\n";
                 if(stopserver($what)) {
                     return ("failed stopping unresponsive ".uc($what)." server", 3);
                 }
@@ -2344,6 +2345,7 @@ sub startservers {
         elsif($what eq "ftp-ipv6") {
             if($torture && $run{'ftp-ipv6'} &&
                !responsive_pingpong_server("ftp", "", $verbose, "ipv6")) {
+                logmsg "* restarting unresponsive HTTP server\n";
                 if(stopserver('ftp-ipv6')) {
                     return ("failed stopping unresponsive FTP-IPv6 server", 3);
                 }
@@ -2359,9 +2361,10 @@ sub startservers {
             }
         }
         elsif($what eq "gopher") {
-            if($torture && $run{'gopher'} &&
+            if($run{'gopher'} &&
                !responsive_http_server("gopher", $verbose, 0,
                                        protoport("gopher"))) {
+                logmsg "* restarting unresponsive gopher server\n";
                 if(stopserver('gopher')) {
                     return ("failed stopping unresponsive GOPHER server", 3);
                 }
@@ -2439,9 +2442,10 @@ sub startservers {
             }
         }
         elsif($what eq "http-proxy") {
-            if($torture && $run{'http-proxy'} &&
+            if($run{'http-proxy'} &&
                !responsive_http_server("http", $verbose, "proxy",
                                        protoport("httpproxy"))) {
+                logmsg "* restarting unresponsive HTTP proxy server\n";
                 if(stopserver('http-proxy')) {
                     return ("failed stopping unresponsive HTTP-proxy server", 3);
                 }
@@ -2477,8 +2481,9 @@ sub startservers {
             }
         }
         elsif($what eq "rtsp") {
-            if($torture && $run{'rtsp'} &&
+            if($run{'rtsp'} &&
                !responsive_rtsp_server($verbose)) {
+                logmsg "* restarting unresponsive rtsp server\n";
                 if(stopserver('rtsp')) {
                     return ("failed stopping unresponsive RTSP server", 3);
                 }
@@ -2521,8 +2526,9 @@ sub startservers {
                     return ("failed stopping $what server with different cert", 3);
                 }
             }
-            if($torture && $run{$cproto} &&
+            if($run{$cproto} &&
                !responsive_pingpong_server($cproto, "", $verbose)) {
+                logmsg "* restarting unresponsive $cproto server\n";
                 if(stopserver($cproto)) {
                     return ("failed stopping unresponsive $cproto server", 3);
                 }
@@ -2561,9 +2567,10 @@ sub startservers {
                     return ("failed stopping HTTPS server with different cert", 3);
                 }
             }
-            if($torture && $run{'http'} &&
+            if($run{'http'} &&
                !responsive_http_server("http", $verbose, 0,
                                        protoport('http'))) {
+                logmsg "* restarting unresponsive HTTP server\n";
                 if(stopserver('http')) {
                     return ("failed stopping unresponsive HTTP server", 3);
                 }
@@ -2599,9 +2606,10 @@ sub startservers {
                     return ("failed stopping GOPHERS server with different cert", 3);
                 }
             }
-            if($torture && $run{'gopher'} &&
+            if($run{'gopher'} &&
                !responsive_http_server("gopher", $verbose, 0,
                                        protoport('gopher'))) {
+                logmsg "* restarting unresponsive gopher server\n";
                 if(stopserver('gopher')) {
                     return ("failed stopping unresponsive GOPHER server", 3);
                 }
@@ -2668,8 +2676,9 @@ sub startservers {
                 # for now, we can't run http TLS-EXT tests without gnutls-serv
                 return ("no gnutls-serv (with SRP support)", 4);
             }
-            if($torture && $run{'httptls'} &&
+            if($run{'httptls'} &&
                !responsive_httptls_server($verbose, "IPv4")) {
+                logmsg "* restarting unresponsive httptls server\n";
                 if(stopserver('httptls')) {
                     return ("failed stopping unresponsive HTTPTLS server", 3);
                 }
@@ -2708,8 +2717,9 @@ sub startservers {
             }
         }
         elsif($what eq "tftp") {
-            if($torture && $run{'tftp'} &&
+            if($run{'tftp'} &&
                !responsive_tftp_server("", $verbose)) {
+                logmsg "* restarting unresponsive fftp server\n";
                 if(stopserver('tftp')) {
                     return ("failed stopping unresponsive TFTP server", 3);
                 }
