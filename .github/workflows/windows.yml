@@ -138,7 +138,7 @@ jobs:
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 12
         run: |
-          export TFLAGS='-j14 ${{ matrix.tflags }}'
+          export TFLAGS='-j14 -k -v ${{ matrix.tflags }}'
           if [ '${{ matrix.sys }}' != 'msys' ]; then
             TFLAGS+=' ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP'
           fi
@@ -219,7 +219,7 @@ jobs:
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 12
         run: |
-          export TFLAGS='-j14 ${{ matrix.tflags }}'
+          export TFLAGS='-j14 -k -v ${{ matrix.tflags }}'
           if [ '${{ matrix.sys }}' != 'msys' ]; then
             TFLAGS+=' ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP'
           fi
@@ -338,7 +338,7 @@ jobs:
         timeout-minutes: 12
         run: |
           PATH="$(cygpath "${USERPROFILE}")/my-cache/${{ matrix.dir }}/bin:/c/msys64/usr/bin:$PATH"
-          export TFLAGS='-j14 ~TFTP ~MQTT ~WebSockets ~FTP ${{ matrix.tflags }}'
+          export TFLAGS='-j14 -v -k ~TFTP ~MQTT ~WebSockets ~FTP ${{ matrix.tflags }}'
           if [ -x "$(cygpath "${SYSTEMROOT}/System32/curl.exe")" ]; then
             TFLAGS+=" -ac $(cygpath "${SYSTEMROOT}/System32/curl.exe")"
           fi
@@ -548,7 +548,7 @@ jobs:
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
         run: |
-          export TFLAGS='-j14 ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP ${{ matrix.tflags }}'
+          export TFLAGS='-j14 -k -v ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP ${{ matrix.tflags }}'
           # GnuTLS is not fully functional on Windows, so skip the tests
           # https://github.com/ShiftMediaProject/gnutls/issues/23
           if [ '${{ matrix.name }}' != 'gnutls' ]; then
