@@ -2340,8 +2340,8 @@ sub displaylogcontent {
 
 sub displaylogs {
 
-    system("netstat -a -o");
-    system("ps -W");
+    print(`netstat -a -o`);
+    print(`ps -W`);
     my $logdir = $LOGDIR;
     opendir(DIR, "$logdir") ||
         die "can't open dir: $!";
