@@ -2339,6 +2339,9 @@ sub displaylogcontent {
 }
 
 sub displaylogs {
+
+    system("netstat -a -o");
+    system("ps -W");
     my $logdir = $LOGDIR;
     opendir(DIR, "$logdir") ||
         die "can't open dir: $!";
