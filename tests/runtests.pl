@@ -367,7 +367,7 @@ sub cleardir {
             }
             else {
                 # Ignore stunnel since we cannot do anything about its locks
-                if(!unlink("$dir/$file") && "$file" !~ /_stunnel\.log$/) {
+                if("$file" !~ /_stunnel\.log$/ && !unlink("$dir/$file")) {
                     $done = 0;
                 }
             }
