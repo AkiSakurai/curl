@@ -207,8 +207,8 @@ sub exit_signal_handler {
     my $signame = shift;
     # For now, simply mimic old behavior.
     killsockfilters($piddir, $proto, $ipvnum, $idnum, $verbose);
-    unlink($pidfile);
-    unlink($portfile);
+    rename($pidfile, $pidfile.".old");
+    rename($portfile, $portfile.".old");
     if($serverlogslocked) {
         $serverlogslocked = 0;
         clear_advisor_read_lock($serverlogs_lockfile);
@@ -382,8 +382,8 @@ sub sysread_or_die {
         logmsg "Exited from sysread_or_die() at $fcaller " .
                "line $lcaller. $srvrname server, sysread error: $!\n";
         killsockfilters($piddir, $proto, $ipvnum, $idnum, $verbose);
-        unlink($pidfile);
-        unlink($portfile);
+        rename($pidfile, $pidfile.".old");
+        rename($portfile, $portfile."old");
         if($serverlogslocked) {
             $serverlogslocked = 0;
             clear_advisor_read_lock($serverlogs_lockfile);
@@ -397,8 +397,8 @@ sub sysread_or_die {
         logmsg "Exited from sysread_or_die() at $fcaller " .
                "line $lcaller. $srvrname server, read zero\n";
         killsockfilters($piddir, $proto, $ipvnum, $idnum, $verbose);
-        unlink($pidfile);
-        unlink($portfile);
+        rename($pidfile, $pidfile.".old");
+        rename($portfile, $portfile."old");
         if($serverlogslocked) {
             $serverlogslocked = 0;
             clear_advisor_read_lock($serverlogs_lockfile);
@@ -427,8 +427,8 @@ sub startsf {
     if($pong !~ /^PONG/) {
         logmsg "Failed sockfilt command: @mainsockfcmd\n";
         killsockfilters($piddir, $proto, $ipvnum, $idnum, $verbose);
-        unlink($pidfile);
-        unlink($portfile);
+        rename($pidfile, $pidfile.".old");
+        rename($portfile, $portfile."old");
         if($serverlogslocked) {
             $serverlogslocked = 0;
             clear_advisor_read_lock($serverlogs_lockfile);
@@ -742,7 +742,7 @@ sub close_dataconn {
                "(pid $datapid)\n";
         print DWRITE "QUIT\n";
         pidwait($datapid, 0);
-        unlink($datasockf_pidfile) if(-f $datasockf_pidfile);
+        rename($datasockf_pidfile, $datasockf_pidfile.".old") if(-f $datasockf_pidfile);
         logmsg "DATA sockfilt for $datasockf_mode data channel quit ".
                "(pid $datapid)\n";
     }
@@ -3361,7 +3361,7 @@ while(1) {
 }
 
 killsockfilters($piddir, $proto, $ipvnum, $idnum, $verbose);
-unlink($pidfile);
+rename($pidfile, $pidfile.".old");
 if($serverlogslocked) {
     $serverlogslocked = 0;
     clear_advisor_read_lock($serverlogs_lockfile);

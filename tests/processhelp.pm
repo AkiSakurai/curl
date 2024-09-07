@@ -252,7 +252,7 @@ sub processexists {
         }
         else {
             # get rid of the certainly invalid pidfile
-            unlink($pidfile) if($pid == pidfromfile($pidfile));
+            rename($pidfile, $pidfile.".old") if($pid == pidfromfile($pidfile));
             # reap its dead children, if not done yet
             pidwait($pid, &WNOHANG);
             # negative return value means dead process
@@ -380,7 +380,7 @@ sub killsockfilters {
             pidkill($pid);
             pidwait($pid, 0);
         }
-        unlink($pidfile) if(-f $pidfile);
+        rename($pidfile, $pidfile.".old") if(-f $pidfile);
     }
 
     return if($proto ne 'ftp');
@@ -394,7 +394,7 @@ sub killsockfilters {
             pidkill($pid);
             pidwait($pid, 0);
         }
-        unlink($pidfile) if(-f $pidfile);
+        rename($pidfile, $pidfile . ".old") if(-f $pidfile);
     }
 }
 
@@ -429,7 +429,7 @@ sub clear_advisor_read_lock {
     my ($filename) = @_;
 
     if(-f $filename) {
-        unlink($filename);
+        rename($filename, $filename . ".old");
     }
 }
 
