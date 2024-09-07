@@ -2994,7 +2994,7 @@ sub stopservers {
             logmsg "$server server unexpectedly alive\n";
             killpid($verb, $pid);
         }
-        rename($pidfile.".old") if(-f $pidfile);
+        rename($pidfile, $pidfile.".old") if(-f $pidfile);
     }
 
     return $result;
