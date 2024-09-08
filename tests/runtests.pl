@@ -368,7 +368,7 @@ sub cleardir {
             else {
                 # Ignore stunnel since we cannot do anything about its locks
                 my $old_name = "$file" =~ /\.old$/ ? $file : "$file.old"; 
-                if("$file" =~ /^(test|stdout|stderr|trace|curl|([0-9]+))/) {
+                if("$file" =~ /^(cmd|file|download|test|stdout|stderr|trace|curl|([0-9]+))/) {
                     if(!unlink("$dir/$file")) {
                         $done = 0;
                     }
