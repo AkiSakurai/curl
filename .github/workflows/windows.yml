@@ -152,9 +152,10 @@ jobs:
           PATH="$PATH:/c/Program Files (x86)/stunnel/bin"
           make -C bld -j5 V=1 test-ci
       - name: 'end trace'
-        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: netsh trace stop
       - uses: actions/upload-artifact@v4
+        if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         with:
           name: ${{matrix.name}}.etl
           path: trace
