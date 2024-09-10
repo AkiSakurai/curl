@@ -248,6 +248,7 @@ jobs:
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: netsh trace stop
       - uses: actions/upload-artifact@v4
+        if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         with:
           name: ${{matrix.name}}.etl
           path: trace
@@ -373,6 +374,7 @@ jobs:
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: netsh trace stop
       - uses: actions/upload-artifact@v4
+        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         with:
           name: ${{matrix.name}}.etl
           path: trace
@@ -594,6 +596,7 @@ jobs:
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: netsh trace stop
       - uses: actions/upload-artifact@v4
+        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         with:
           name: ${{matrix.name}}.etl
           path: trace
