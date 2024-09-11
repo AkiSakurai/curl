@@ -501,7 +501,7 @@ sub stopserver {
     my $result = 0;
     foreach my $server (@killservers) {
         my $pidfile = $serverpidfile{$server};
-        unlink($pidfile) if(-f $pidfile);
+        rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
     }
 
     return $result;
@@ -1131,7 +1131,7 @@ sub runhttpserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $portfile = $serverportfile{$server};
@@ -1215,7 +1215,7 @@ sub runhttp2server {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1276,7 +1276,7 @@ sub runhttp3server {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1342,7 +1342,7 @@ sub runhttpsserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     $certfile = 'stunnel.pem' unless($certfile);
@@ -1420,7 +1420,7 @@ sub runhttptlsserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1483,7 +1483,7 @@ sub runpingpongserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1558,7 +1558,7 @@ sub runsecureserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     $certfile = 'stunnel.pem' unless($certfile);
@@ -1629,7 +1629,7 @@ sub runtftpserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $portfile = $serverportfile{$server};
@@ -1706,7 +1706,7 @@ sub runrtspserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1786,7 +1786,7 @@ sub runsshserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1898,7 +1898,7 @@ sub runmqttserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1954,7 +1954,7 @@ sub runsocksserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $portfile = $serverportfile{$server};
@@ -2026,7 +2026,7 @@ sub rundictserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -2087,7 +2087,7 @@ sub runsmbserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -2148,7 +2148,7 @@ sub runnegtelnetserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -2348,6 +2348,11 @@ sub displaylogs {
     my @logs = readdir(DIR);
     closedir(DIR);
 
+    opendir(DIR, "$logdir/server") ||
+        die "can't open dir: $!";
+    @logs = ((map {"server/$_"} readdir(DIR)), @logs);
+    closedir(DIR);
+
     logmsg "== Contents of files in the $logdir/ dir after server unresponsive\n";
     foreach my $log (sort @logs) {
         if($log =~ /\.(\.|)$/) {
@@ -2380,6 +2385,7 @@ sub displaylogs {
 #          4 for an unsupported server type
 #
 sub startservers {
+
     my @what = @_;
     my ($pid, $pid2);
     my $serr;  # error while starting a server (as of the return enumerations)
