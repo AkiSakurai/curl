@@ -501,7 +501,7 @@ sub stopserver {
     my $result = 0;
     foreach my $server (@killservers) {
         my $pidfile = $serverpidfile{$server};
-        unlink($pidfile) if(-f $pidfile);
+        rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
     }
 
     return $result;
@@ -1131,7 +1131,7 @@ sub runhttpserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $portfile = $serverportfile{$server};
@@ -1215,7 +1215,7 @@ sub runhttp2server {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1276,7 +1276,7 @@ sub runhttp3server {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1342,7 +1342,7 @@ sub runhttpsserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     $certfile = 'stunnel.pem' unless($certfile);
@@ -1420,7 +1420,7 @@ sub runhttptlsserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1483,7 +1483,7 @@ sub runpingpongserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1558,7 +1558,7 @@ sub runsecureserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     $certfile = 'stunnel.pem' unless($certfile);
@@ -1629,7 +1629,7 @@ sub runtftpserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $portfile = $serverportfile{$server};
@@ -1706,7 +1706,7 @@ sub runrtspserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1786,7 +1786,7 @@ sub runsshserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1898,7 +1898,7 @@ sub runmqttserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -1954,7 +1954,7 @@ sub runsocksserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $portfile = $serverportfile{$server};
@@ -2026,7 +2026,7 @@ sub rundictserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -2087,7 +2087,7 @@ sub runsmbserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -2148,7 +2148,7 @@ sub runnegtelnetserver {
     if($pid > 0) {
         stopserver($server, "$pid");
     }
-    unlink($pidfile) if(-f $pidfile);
+    rename($pidfile, $pidfile.".old" ) if(-f $pidfile);
 
     my $srvrname = servername_str($proto, $ipvnum, $idnum);
     my $logfile = server_logfilename($LOGDIR, $proto, $ipvnum, $idnum);
@@ -2298,6 +2298,82 @@ sub responsive_httptls_server {
     return &responsiveserver($proto, $ipvnum, $idnum, $ip, $port);
 }
 
+# Display the contents of the given file.  Line endings are canonicalized
+# and excessively long files are elided
+sub displaylogcontent {
+    my ($file)=@_;
+    if(open(my $single, "<", "$file")) {
+        my $linecount = 0;
+        my $truncate;
+        my @tail;
+        while(my $string = <$single>) {
+            $string =~ s/\r\n/\n/g;
+            $string =~ s/[\r\f\032]/\n/g;
+            $string .= "\n" unless ($string =~ /\n$/);
+            $string =~ tr/\n//;
+            for my $line (split(m/\n/, $string)) {
+                $line =~ s/\s*\!$//;
+                if ($truncate) {
+                    push @tail, " $line\n";
+                } else {
+                    logmsg " $line\n";
+                }
+                $linecount++;
+                $truncate = $linecount > 1200;
+            }
+        }
+        close($single);
+        if(@tail) {
+            my $tailshow = 200;
+            my $tailskip = 0;
+            my $tailtotal = scalar @tail;
+            if($tailtotal > $tailshow) {
+                $tailskip = $tailtotal - $tailshow;
+                logmsg "=== File too long: $tailskip lines omitted here\n";
+            }
+            for($tailskip .. $tailtotal-1) {
+                logmsg "$tail[$_]";
+            }
+        }
+    }
+}
+
+sub displaylogs {
+
+    print(`netstat -a -o`);
+    print(`ps -W`);
+    my $logdir = $LOGDIR;
+    opendir(DIR, "$logdir") ||
+        die "can't open dir: $!";
+    my @logs = readdir(DIR);
+    closedir(DIR);
+
+    opendir(DIR, "$logdir/server") ||
+        die "can't open dir: $!";
+    @logs = ((map {"server/$_"} readdir(DIR)), @logs);
+    closedir(DIR);
+
+    logmsg "== Contents of files in the $logdir/ dir after server unresponsive\n";
+    foreach my $log (sort @logs) {
+        if($log =~ /\.(\.|)$/) {
+            next; # skip "." and ".."
+        }
+        if($log =~ /^\.nfs/) {
+            next; # skip ".nfs"
+        }
+        if(($log eq "memdump") || ($log eq "core")) {
+            next; # skip "memdump" and  "core"
+        }
+        if((-d "$logdir/$log") || (! -s "$logdir/$log")) {
+            next; # skip directory and empty files
+        }
+
+        logmsg "=== Start of file $log\n";
+        displaylogcontent("$logdir/$log");
+        logmsg "=== End of file $log\n";
+    }
+}
+
 #######################################################################
 # startservers() starts all the named servers
 #
@@ -2309,6 +2385,7 @@ sub responsive_httptls_server {
 #          4 for an unsupported server type
 #
 sub startservers {
+
     my @what = @_;
     my ($pid, $pid2);
     my $serr;  # error while starting a server (as of the return enumerations)
@@ -2326,8 +2403,10 @@ sub startservers {
            ($what eq "ftp") ||
            ($what eq "imap") ||
            ($what eq "smtp")) {
-            if($torture && $run{$what} &&
+            if($run{$what} &&
                !responsive_pingpong_server($what, "", $verbose)) {
+                logmsg "* restarting unresponsive $what server\n";
+                displaylogs;
                 if(stopserver($what)) {
                     return ("failed stopping unresponsive ".uc($what)." server", 3);
                 }
@@ -2344,6 +2423,7 @@ sub startservers {
         elsif($what eq "ftp-ipv6") {
             if($torture && $run{'ftp-ipv6'} &&
                !responsive_pingpong_server("ftp", "", $verbose, "ipv6")) {
+                logmsg "* restarting unresponsive HTTP server\n";
                 if(stopserver('ftp-ipv6')) {
                     return ("failed stopping unresponsive FTP-IPv6 server", 3);
                 }
@@ -2359,9 +2439,11 @@ sub startservers {
             }
         }
         elsif($what eq "gopher") {
-            if($torture && $run{'gopher'} &&
+            if($run{'gopher'} &&
                !responsive_http_server("gopher", $verbose, 0,
                                        protoport("gopher"))) {
+                logmsg "* restarting unresponsive gopher server\n";
+                displaylogs;
                 if(stopserver('gopher')) {
                     return ("failed stopping unresponsive GOPHER server", 3);
                 }
@@ -2420,9 +2502,9 @@ sub startservers {
             }
         }
         elsif($what eq "http") {
-            if($run{'http'} &&
-               !responsive_http_server("http", $verbose, 0, protoport('http'))) {
+            if($run{'http'} && !responsive_http_server("http", $verbose, 0, protoport('http'))) {
                 logmsg "* restarting unresponsive HTTP server\n";
+                displaylogs;
                 if(stopserver('http')) {
                     return ("failed stopping unresponsive HTTP server", 3);
                 }
@@ -2439,9 +2521,11 @@ sub startservers {
             }
         }
         elsif($what eq "http-proxy") {
-            if($torture && $run{'http-proxy'} &&
+            if($run{'http-proxy'} &&
                !responsive_http_server("http", $verbose, "proxy",
                                        protoport("httpproxy"))) {
+                logmsg "* restarting unresponsive HTTP proxy server\n";
+                displaylogs;
                 if(stopserver('http-proxy')) {
                     return ("failed stopping unresponsive HTTP-proxy server", 3);
                 }
@@ -2477,8 +2561,10 @@ sub startservers {
             }
         }
         elsif($what eq "rtsp") {
-            if($torture && $run{'rtsp'} &&
+            if($run{'rtsp'} &&
                !responsive_rtsp_server($verbose)) {
+                logmsg "* restarting unresponsive rtsp server\n";
+                displaylogs;
                 if(stopserver('rtsp')) {
                     return ("failed stopping unresponsive RTSP server", 3);
                 }
@@ -2521,8 +2607,10 @@ sub startservers {
                     return ("failed stopping $what server with different cert", 3);
                 }
             }
-            if($torture && $run{$cproto} &&
+            if($run{$cproto} &&
                !responsive_pingpong_server($cproto, "", $verbose)) {
+                logmsg "* restarting unresponsive $cproto server\n";
+                displaylogs;
                 if(stopserver($cproto)) {
                     return ("failed stopping unresponsive $cproto server", 3);
                 }
@@ -2561,11 +2649,22 @@ sub startservers {
                     return ("failed stopping HTTPS server with different cert", 3);
                 }
             }
-            if($torture && $run{'http'} &&
+            if($run{'http'} &&
                !responsive_http_server("http", $verbose, 0,
                                        protoport('http'))) {
+                logmsg "* restarting unresponsive HTTP server\n";
+                displaylogs;
                 if(stopserver('http')) {
                     return ("failed stopping unresponsive HTTP server", 3);
+                }
+            }
+            if($run{'https'} &&
+               !responsive_http_server("https", $verbose, 0,
+                                       protoport('https'))) {
+                logmsg "* restarting unresponsive HTTPS server\n";
+                displaylogs;
+                if(stopserver('https')) {
+                    return ("failed stopping unresponsive HTTPS server", 3);
                 }
             }
             if(!$run{'http'}) {
@@ -2599,9 +2698,11 @@ sub startservers {
                     return ("failed stopping GOPHERS server with different cert", 3);
                 }
             }
-            if($torture && $run{'gopher'} &&
+            if($run{'gopher'} &&
                !responsive_http_server("gopher", $verbose, 0,
                                        protoport('gopher'))) {
+                logmsg "* restarting unresponsive gopher server\n";
+                displaylogs;
                 if(stopserver('gopher')) {
                     return ("failed stopping unresponsive GOPHER server", 3);
                 }
@@ -2668,8 +2769,10 @@ sub startservers {
                 # for now, we can't run http TLS-EXT tests without gnutls-serv
                 return ("no gnutls-serv (with SRP support)", 4);
             }
-            if($torture && $run{'httptls'} &&
+            if($run{'httptls'} &&
                !responsive_httptls_server($verbose, "IPv4")) {
+                logmsg "* restarting unresponsive httptls server\n";
+                displaylogs;
                 if(stopserver('httptls')) {
                     return ("failed stopping unresponsive HTTPTLS server", 3);
                 }
@@ -2708,8 +2811,10 @@ sub startservers {
             }
         }
         elsif($what eq "tftp") {
-            if($torture && $run{'tftp'} &&
+            if($run{'tftp'} &&
                !responsive_tftp_server("", $verbose)) {
+                logmsg "* restarting unresponsive fftp server\n";
+                displaylogs;
                 if(stopserver('tftp')) {
                     return ("failed stopping unresponsive TFTP server", 3);
                 }
@@ -2895,7 +3000,7 @@ sub stopservers {
             logmsg "$server server unexpectedly alive\n";
             killpid($verb, $pid);
         }
-        unlink($pidfile) if(-f $pidfile);
+        rename($pidfile, $pidfile.".old") if(-f $pidfile);
     }
 
     return $result;

@@ -5,6 +5,7 @@
 name: Windows
 
 'on':
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -133,11 +134,14 @@ jobs:
         timeout-minutes: 10
         run: make -C bld -j5 V=1 -C tests
 
+      - name: 'start trace'
+        if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        run: netsh trace start persistent=yes capture=yes tracefile=trace
       - name: 'autotools run tests'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 12
         run: |
-          export TFLAGS='-j14 ${{ matrix.tflags }}'
+          export TFLAGS='-j14 -k -v ${{ matrix.tflags }}'
           if [ '${{ matrix.sys }}' != 'msys' ]; then
             TFLAGS+=' ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP'
           fi
@@ -147,7 +151,14 @@ jobs:
           /c/ProgramData/chocolatey/choco.exe install --yes --no-progress --limit-output --timeout 180 stunnel --force
           PATH="$PATH:/c/Program Files (x86)/stunnel/bin"
           make -C bld -j5 V=1 test-ci
-
+      - name: 'end trace'
+        if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        run: netsh trace stop
+      - uses: actions/upload-artifact@v4
+        if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        with:
+          name: ${{matrix.name}}.etl
+          path: trace
       - name: 'cmake configure'
         if: ${{ matrix.build == 'cmake' }}
         timeout-minutes: 5
@@ -214,11 +225,15 @@ jobs:
         timeout-minutes: 10
         run: cmake --build bld --config '${{ matrix.type }}' --parallel 5 --target testdeps
 
+      - name: 'start trace'
+        if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        run: netsh trace start persistent=yes capture=yes tracefile=trace
+
       - name: 'cmake run tests'
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 12
         run: |
-          export TFLAGS='-j14 ${{ matrix.tflags }}'
+          export TFLAGS='-j14 -k -v ${{ matrix.tflags }}'
           if [ '${{ matrix.sys }}' != 'msys' ]; then
             TFLAGS+=' ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP'
           fi
@@ -229,6 +244,14 @@ jobs:
           PATH="$PWD/bld/lib:$PATH:/c/Program Files (x86)/stunnel/bin"
           cmake --build bld --config '${{ matrix.type }}' --target test-ci
 
+      - name: 'end trace'
+        if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        run: netsh trace stop
+      - uses: actions/upload-artifact@v4
+        if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        with:
+          name: ${{matrix.name}}.etl
+          path: trace
   old-mingw-w64:
     name: 'old-mingw, CM ${{ matrix.env }} ${{ matrix.name }}'
     runs-on: windows-latest
@@ -332,19 +355,29 @@ jobs:
           PATH="$(cygpath "${USERPROFILE}")/my-cache/${{ matrix.dir }}/bin:/c/msys64/usr/bin:$PATH"
           cmake --build bld --config '${{ matrix.type }}' --parallel 5 --target testdeps
 
+      - name: 'start trace'
+        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        run: netsh trace start persistent=yes capture=yes tracefile=trace
       - name: 'cmake run tests'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 12
         run: |
           PATH="$(cygpath "${USERPROFILE}")/my-cache/${{ matrix.dir }}/bin:/c/msys64/usr/bin:$PATH"
-          export TFLAGS='-j14 ~TFTP ~MQTT ~WebSockets ~FTP ${{ matrix.tflags }}'
+          export TFLAGS='-j14 -v -k ~TFTP ~MQTT ~WebSockets ~FTP ${{ matrix.tflags }}'
           if [ -x "$(cygpath "${SYSTEMROOT}/System32/curl.exe")" ]; then
             TFLAGS+=" -ac $(cygpath "${SYSTEMROOT}/System32/curl.exe")"
           fi
           /c/ProgramData/chocolatey/choco.exe install --yes --no-progress --limit-output --timeout 180 stunnel --force
           PATH="$PWD/bld/lib:$PATH:/c/Program Files (x86)/stunnel/bin"
           cmake --build bld --config '${{ matrix.type }}' --target test-ci
-
+      - name: 'end trace'
+        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        run: netsh trace stop
+      - uses: actions/upload-artifact@v4
+        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        with:
+          name: ${{matrix.name}}.etl
+          path: trace
   linux-cross-mingw-w64:
     name: "linux-mingw, ${{ matrix.build == 'cmake' && 'CM' || 'AM' }} ${{ matrix.compiler }}"
     runs-on: ubuntu-latest
@@ -543,11 +576,15 @@ jobs:
         timeout-minutes: 10
         run: cmake --build bld --config '${{ matrix.type }}' --parallel 5 --target testdeps
 
+      - name: 'start trace'
+        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        run: netsh trace start persistent=yes capture=yes tracefile=trace
+
       - name: 'cmake run tests'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
         run: |
-          export TFLAGS='-j14 ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP ${{ matrix.tflags }}'
+          export TFLAGS='-j14 -k -v ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP ${{ matrix.tflags }}'
           # GnuTLS is not fully functional on Windows, so skip the tests
           # https://github.com/ShiftMediaProject/gnutls/issues/23
           if [ '${{ matrix.name }}' != 'gnutls' ]; then
@@ -555,3 +592,11 @@ jobs:
           fi
           PATH="$PWD/bld/lib:$PATH:/c/Program Files (x86)/stunnel/bin"
           cmake --build bld --config '${{ matrix.type }}' --target test-ci
+      - name: 'end trace'
+        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        run: netsh trace stop
+      - uses: actions/upload-artifact@v4
+        if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
+        with:
+          name: ${{matrix.name}}.etl
+          path: trace
