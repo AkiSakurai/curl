@@ -1879,7 +1879,7 @@ sub singletest {
         }
         logmsg $logs;
         updatetesttimings($testnum, %$testtimings);
-        if($error == -2) {
+        if(defined $error && $error == -2) {
             if($postmortem) {
                 # Error indicates an actual problem starting the server, so
                 # display the server logs
