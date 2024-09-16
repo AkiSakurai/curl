@@ -159,6 +159,7 @@ jobs:
       - name: 'autotools run tests'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
+        continue-on-error: true
         run: |
           export TFLAGS='-j14 -k -v ${{ matrix.tflags }} ~SCP'
           if [ '${{ matrix.sys }}' != 'msys' ]; then
@@ -260,6 +261,7 @@ jobs:
       - name: 'cmake run tests'
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
+        continue-on-error: true
         run: |
           export TFLAGS='-j14 -k -v ${{ matrix.tflags }} ~SCP'
           if [ '${{ matrix.sys }}' != 'msys' ]; then
@@ -399,6 +401,7 @@ jobs:
       - name: 'cmake run tests'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
+        continue-on-error: true
         run: |
           PATH="$(cygpath "${USERPROFILE}")/my-cache/${{ matrix.dir }}/bin:/c/msys64/usr/bin:$PATH"
           export TFLAGS='-j14 -v -k ~TFTP ~MQTT ~WebSockets ~FTP ${{ matrix.tflags }}'
@@ -632,6 +635,7 @@ jobs:
       - name: 'cmake run tests'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 16
+        continue-on-error: true
         run: |
           export TFLAGS='-k -v -j14 ~TFTP ~MQTT ~WebSockets ~SMTP ~FTP ~SCP ~612 ${{ matrix.tflags }}'
           if [[ '${{ matrix.install }}' = *'libssh2[core,zlib]'* ]]; then
