@@ -155,7 +155,7 @@ jobs:
 
       - name: 'start trace'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: netsh trace start persistent=yes capture=yes tracefile=trace
+        run: RawCap.exe 127.0.0.1 trace.pcap &
       - name: 'autotools run tests'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
@@ -174,12 +174,12 @@ jobs:
           make -C bld -j5 V=1 test-ci
       - name: 'end trace'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: netsh trace stop
+        run: ls
       - uses: actions/upload-artifact@v4
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         with:
-          name: ${{matrix.name}}.etl
-          path: trace
+          name: ${{matrix.name}}.pcap
+          path: trace.pcap
       - name: 'cmake configure'
         if: ${{ matrix.build == 'cmake' }}
         timeout-minutes: 5
@@ -255,7 +255,7 @@ jobs:
 
       - name: 'start trace'
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: netsh trace start persistent=yes capture=yes tracefile=trace
+        run: RawCap.exe 127.0.0.1 trace.pcap &
 
       - name: 'cmake run tests'
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
@@ -276,12 +276,12 @@ jobs:
 
       - name: 'end trace'
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: netsh trace stop
+        run: ls
       - uses: actions/upload-artifact@v4
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         with:
-          name: ${{matrix.name}}.etl
-          path: trace
+          name: ${{matrix.name}}.pcap
+          path: trace.pcap
   old-mingw-w64:
     name: 'old-mingw, CM ${{ matrix.env }} ${{ matrix.name }}'
     runs-on: windows-latest
@@ -395,7 +395,7 @@ jobs:
 
       - name: 'start trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: netsh trace start persistent=yes capture=yes tracefile=trace
+        run: RawCap.exe 127.0.0.1 trace.pcap &
       - name: 'cmake run tests'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
@@ -409,12 +409,12 @@ jobs:
           cmake --build bld --config '${{ matrix.type }}' --target test-ci
       - name: 'end trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: netsh trace stop
+        run: ls
       - uses: actions/upload-artifact@v4
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         with:
-          name: ${{matrix.name}}.etl
-          path: trace
+          name: ${{matrix.name}}.pcap
+          path: trace.pcap
   linux-cross-mingw-w64:
     name: "linux-mingw, ${{ matrix.build == 'cmake' && 'CM' || 'AM' }} ${{ matrix.compiler }}"
     runs-on: ubuntu-latest
@@ -615,7 +615,7 @@ jobs:
 
       - name: 'start trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: netsh trace start persistent=yes capture=yes tracefile=trace
+        run: RawCap.exe 127.0.0.1 trace.pcap &
 
       - name: 'install test tools'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
@@ -643,9 +643,9 @@ jobs:
           cmake --build bld --config '${{ matrix.type }}' --target test-ci
       - name: 'end trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: netsh trace stop
+        run: ls
       - uses: actions/upload-artifact@v4
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         with:
-          name: ${{matrix.name}}.etl
-          path: trace
+          name: ${{matrix.name}}.pcap
+          path: trace.pcap
