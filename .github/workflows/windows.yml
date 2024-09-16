@@ -155,7 +155,7 @@ jobs:
 
       - name: 'start trace'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: RawCap.exe 127.0.0.1 trace.pcap &
+        run: ./RawCap.exe 127.0.0.1 trace.pcap &
       - name: 'autotools run tests'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
@@ -255,7 +255,7 @@ jobs:
 
       - name: 'start trace'
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: RawCap.exe 127.0.0.1 trace.pcap &
+        run: ./RawCap.exe 127.0.0.1 trace.pcap &
 
       - name: 'cmake run tests'
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
@@ -395,7 +395,7 @@ jobs:
 
       - name: 'start trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: RawCap.exe 127.0.0.1 trace.pcap &
+        run: ./RawCap.exe 127.0.0.1 trace.pcap &
       - name: 'cmake run tests'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         timeout-minutes: 14
@@ -615,7 +615,7 @@ jobs:
 
       - name: 'start trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
-        run: RawCap.exe 127.0.0.1 trace.pcap &
+        run: ./RawCap.exe 127.0.0.1 trace.pcap &
 
       - name: 'install test tools'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
