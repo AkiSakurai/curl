@@ -3117,11 +3117,15 @@ logmsg("logged pid $$ in $pidfile\n");
 while(1) {
 
     # kill previous data connection sockfilt when alive
+    logmsg "kill sockfit\n";
+
     if($datasockf_runs eq 'yes') {
         killsockfilters($piddir, $proto, $ipvnum, $idnum, $verbose, 'data');
         logmsg "DATA sockfilt for $datasockf_mode data channel killed now\n";
     }
     datasockf_state('STOPPED');
+
+    logmsg "sockfit killed\n";
 
     #
     # We read 'sockfilt' commands.
@@ -3364,6 +3368,8 @@ while(1) {
         $serverlogslocked = 0;
         clear_advisor_read_lock($serverlogs_lockfile);
     }
+    logmsg "====> lock cleared\n";
+
 }
 
 killsockfilters($piddir, $proto, $ipvnum, $idnum, $verbose);
