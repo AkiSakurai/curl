@@ -61,6 +61,8 @@ jobs:
           - { build: 'cmake'    , sys: 'mingw32', env: 'i686'        , tflags: 'skiprun'                 , config: '-DENABLE_DEBUG=OFF -DBUILD_SHARED_LIBS=ON -DCURL_USE_SCHANNEL=ON -DENABLE_UNICODE=ON -DBUILD_EXAMPLES=OFF', type: 'Release', name: 'schannel R' }
       fail-fast: false
     steps:
+      - run: Add-MpPreference -ExclusionPath $(Get-Location).tostring(),$Env:TEMP,c:\ -ErrorAction Ignore
+        shell: pwsh
       - run: git config --global core.autocrlf input
         shell: pwsh
 
@@ -317,6 +319,8 @@ jobs:
             tflags: 'skiprun'
       fail-fast: false
     steps:
+      - run: Add-MpPreference -ExclusionPath $(Get-Location).tostring(),$Env:TEMP,c:\ -ErrorAction Ignore
+        shell: pwsh
       - name: 'cache compiler (gcc ${{ matrix.env }})'
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
         id: cache-compiler
@@ -547,6 +551,8 @@ jobs:
             config: '-DENABLE_DEBUG=ON -DENABLE_UNICODE=OFF -DCURL_USE_SCHANNEL=OFF -DCURL_BROTLI=ON -DCURL_ZSTD=ON -DBUILD_SHARED_LIBS=OFF -DCURL_USE_LIBSSH2=OFF -DCURL_USE_LIBSSH=ON -DCURL_USE_GNUTLS=ON -DCURL_USE_GSASL=ON -DUSE_NGTCP2=ON'
       fail-fast: false
     steps:
+      - run: Add-MpPreference -ExclusionPath $(Get-Location).tostring(),$Env:TEMP,c:\ -ErrorAction Ignore
+        shell: pwsh
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: 'vcpkg cache setup'
