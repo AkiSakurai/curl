@@ -222,7 +222,7 @@ sub pidwait {
         while(pidexists($pid)) {
             portable_sleep(0.01);
             $total += 0.01;
-            if($total > 10) {
+            if($total > 1) {
                 logmsg "pidwait: $pid timed out\n";
                 logmsg `ps -W`;
                 logmsg `netstat -a -o`;
@@ -241,7 +241,7 @@ sub pidwait {
         while(waitpid($pid, &WNOHANG) == 0) {
             portable_sleep(0.01);
             $total += 0.01;
-            if($total > 10) {
+            if($total > 1) {
                 logmsg "pidwait: $pid timed out\n";
                 logmsg `ps -W`;
                 logmsg `netstat -a -o`;

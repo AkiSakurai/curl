@@ -2915,7 +2915,6 @@ while () {
     if(scalar(@runnersidle) && scalar(@runtests)) {
         # A runner is ready to run a test, and tests are still available to run
         # so start a new test.
-        print `systeminfo`;
         $count++;
         my $testnum = shift(@runtests);
 
