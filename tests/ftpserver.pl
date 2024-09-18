@@ -3363,6 +3363,17 @@ while(1) {
 
     } # while(1)
     logmsg "====> Client disconnected\n";
+    
+    # kill previous data connection sockfilt when alive
+    logmsg "kill sockfit\n";
+
+    if($datasockf_runs eq 'yes') {
+        killsockfilters($piddir, $proto, $ipvnum, $idnum, $verbose, 'data');
+        logmsg "DATA sockfilt for $datasockf_mode data channel killed now\n";
+    }
+    datasockf_state('STOPPED');
+
+    logmsg "sockfit killed\n";
 
     if($serverlogslocked) {
         $serverlogslocked = 0;
