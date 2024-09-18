@@ -218,10 +218,40 @@ sub pidwait {
         if($flags == &WNOHANG) {
             return pidexists($pid)?0:$pid;
         }
+        my $total = 0;
         while(pidexists($pid)) {
             portable_sleep(0.01);
+            $total += 0.01;
+            if($total > 10) {
+                logmsg "pidwait: $pid timed out\n";
+                logmsg `ps -W`;
+                logmsg `netstat -a -o`;
+                print "pidwait: $pid timed out\n";
+                print(`ps -W`);
+                print(`netstat -a -o`);
+
+                $total = 0;
+            }
         }
         return $pid;
+    }
+
+    if($flags != &WNOHANG) {
+        my $total = 0;
+        while(waitpid($pid, &WNOHANG) == 0) {
+            portable_sleep(0.01);
+            $total += 0.01;
+            if($total > 10) {
+                logmsg "pidwait: $pid timed out\n";
+                logmsg `ps -W`;
+                logmsg `netstat -a -o`;
+                print "pidwait: $pid timed out\n";
+                print(`ps -W`);
+                print(`netstat -a -o`);
+
+                $total = 0;
+            }
+        }
     }
 
     # wait on the process to terminate
