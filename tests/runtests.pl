@@ -3175,5 +3175,6 @@ else {
 }
 
 if(($total && (($ok+$ign) != $total)) || !$total || $unexpected) {
+    print "total: $total ok: $ok  ign: $ign  unexpected: $unexpected\n";
     exit 1;
 }
