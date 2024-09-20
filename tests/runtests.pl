@@ -2896,6 +2896,14 @@ createrunners($numrunners);
 print "Runners: start run loop\n";
 my $runner_wait_cnt = 0;
 while () {
+    my $msg = "waiting for " . scalar(%runnersrunning) . " results:";
+    my $sep = " ";
+    foreach my $rid (keys %runnersrunning) {
+        $msg .= $sep . $runnersrunning{$rid} . "[$rid]";
+        $sep = ", "
+    }
+    printf "$msg\n";
+
     # check the abort flag
     if($globalabort) {
         logmsg singletest_dumplogs();
@@ -2914,13 +2922,14 @@ while () {
         last;
     }
 
+
     # Start a new test if possible
     if(scalar(@runnersidle) && scalar(@runtests)) {
         # A runner is ready to run a test, and tests are still available to run
         # so start a new test.
         $count++;
         my $testnum = shift(@runtests);
-
+        print "Runners: starting test $testnum\n";
         # pick a runner for this new test
         my $runnerid = pickrunner($testnum);
         $countforrunner{$runnerid} = $count;
@@ -2939,7 +2948,10 @@ while () {
                 die "Internal error: test must not complete on first call";
             }
         }
+
     }
+    print "Runners: check has runners\n";
+
 
     # See if we've completed all the tests
     if(!scalar(%runnersrunning)) {
@@ -2962,6 +2974,10 @@ while () {
         $riderror = $ridready;
         undef $ridready;
     }
+    
+    print "Runners: service runners $ridready\n" if $ridready;
+    print "Runners: service runners\n" if !$ridready;
+
     if($ridready) {
         # This runner is ready to be serviced
         my $testnum = $runnersrunning{$ridready};
@@ -3011,15 +3027,6 @@ while () {
     }
     if(!$ridready && $runnerwait && !$torture && scalar(%runnersrunning)) {
         $runner_wait_cnt++;
-        if($runner_wait_cnt >= 5) {
-            my $msg = "waiting for " . scalar(%runnersrunning) . " results:";
-            my $sep = " ";
-            foreach my $rid (keys %runnersrunning) {
-                $msg .= $sep . $runnersrunning{$rid} . "[$rid]";
-                $sep = ", "
-            }
-            logmsg "$msg\n";
-        }
         if($runner_wait_cnt >= 10) {
             $runner_wait_cnt = 0;
             foreach my $rid (keys %runnersrunning) {
@@ -3029,6 +3036,8 @@ while () {
             }
         }
     }
+
+
     if($riderror) {
         logmsg "ERROR: runner $riderror is dead! aborting test run\n";
         delete $runnersrunning{$riderror} if(defined $runnersrunning{$riderror});
