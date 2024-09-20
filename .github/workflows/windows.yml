@@ -154,7 +154,6 @@ jobs:
         run: |
           /c/ProgramData/chocolatey/choco.exe install --yes --no-progress --limit-output --timeout 180 --force stunnel || true
           curl --disable --fail --silent --show-error --connect-timeout 15 --max-time 60 --retry 3 https://live.sysinternals.com/handle64.exe --output /bin/handle64.exe
-
       - name: 'start trace'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: ./RawCap.exe 127.0.0.1 trace.pcap &
@@ -174,7 +173,7 @@ jobs:
             TFLAGS+=" -ac $(cygpath "${SYSTEMROOT}/System32/curl.exe")"
           fi
           PATH="$PATH:/c/Program Files (x86)/stunnel/bin"
-          make -C bld -j5 V=1 test-ci
+          make --debug=j -C bld -j5 V=1 test-ci
       - name: 'end trace'
         if: ${{ matrix.build == 'autotools' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: ls
@@ -276,7 +275,7 @@ jobs:
             TFLAGS+=" -ac $(cygpath "${SYSTEMROOT}/System32/curl.exe")"
           fi
           PATH="$PWD/bld/lib:$PATH:/c/Program Files (x86)/stunnel/bin"
-          cmake --build bld --config '${{ matrix.type }}' --target test-ci
+          cmake --build bld --config '${{ matrix.type }}' --target test-ci -- -v
 
       - name: 'end trace'
         if: ${{ matrix.build == 'cmake' && matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
@@ -413,7 +412,7 @@ jobs:
             TFLAGS+=" -ac $(cygpath "${SYSTEMROOT}/System32/curl.exe")"
           fi
           PATH="$PWD/bld/lib:$PATH:/c/Program Files (x86)/stunnel/bin"
-          cmake --build bld --config '${{ matrix.type }}' --target test-ci
+          cmake --build bld --config '${{ matrix.type }}' --target test-ci -- --debug=j
       - name: 'end trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: ls
@@ -650,7 +649,7 @@ jobs:
             TFLAGS+=' ~614'  # 'SFTP pre-quote chmod' SFTP, pre-quote, directory
           fi
           PATH="$PWD/bld/lib:$PATH:/c/Program Files (x86)/stunnel/bin:/c/Program Files/OpenSSH-Win64"
-          cmake --build bld --config '${{ matrix.type }}' --target test-ci
+          cmake --build bld --config '${{ matrix.type }}' --target test-ci -- -v:d
       - name: 'end trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: ls
