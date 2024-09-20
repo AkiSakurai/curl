@@ -2881,7 +2881,8 @@ citest_starttestrun();
 my $numrunners = $jobs < scalar(@runtests) ? $jobs : scalar(@runtests);
 createrunners($numrunners);
 
-#######################################################################
+#########################
+##############################################
 # The main test-loop
 #
 # Every iteration through the loop consists of these steps:
@@ -2891,6 +2892,8 @@ createrunners($numrunners);
 #   - if a runner has a response for us, process the response
 
 # run through each candidate test and execute it
+
+print "Runners: start run loop\n";
 my $runner_wait_cnt = 0;
 while () {
     # check the abort flag
@@ -3043,16 +3046,23 @@ while () {
     }
 }
 
+print "Runners: finish test run\n";
+
 my $sofar = time() - $start;
 
 #######################################################################
 # Finish CI Test Run
 citest_finishtestrun();
 
+print "Runners: stop servers\n";
+
+
 # Tests done, stop the servers
 foreach my $runnerid (values %runnerids) {
     runnerac_stopservers($runnerid);
 }
+
+print "Runners: waiting stop server stop\n";
 
 # Wait for servers to stop
 my $unexpected;
@@ -3061,6 +3071,8 @@ foreach my $runnerid (values %runnerids) {
     $unexpected ||= $unexpect;
     logmsg $logs;
 }
+
+print "Runners: kill runners\n";
 
 # Kill the runners
 # There is a race condition here since we don't know exactly when the runners
@@ -3074,12 +3086,16 @@ foreach my $runnerid (values %runnerids) {
 my $numskipped = %skipped ? sum values %skipped : 0;
 my $all = $total + $numskipped;
 
+print "Runners: runtimestats\n";
+
 runtimestats($lasttest);
 
 if($all) {
     logmsg "TESTDONE: $all tests were considered during ".
         sprintf("%.0f", $sofar) ." seconds.\n";
 }
+
+print "Runners: check skipped\n";
 
 if(%skipped && !$short) {
     my $s=0;

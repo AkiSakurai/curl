@@ -649,7 +649,7 @@ jobs:
             TFLAGS+=' ~614'  # 'SFTP pre-quote chmod' SFTP, pre-quote, directory
           fi
           PATH="$PWD/bld/lib:$PATH:/c/Program Files (x86)/stunnel/bin:/c/Program Files/OpenSSH-Win64"
-          cmake --build bld --config '${{ matrix.type }}' --target test-ci -- -v:d
+          cmake --build bld --config '${{ matrix.type }}' --target test-ci
       - name: 'end trace'
         if: ${{ matrix.tflags != 'skipall' && matrix.tflags != 'skiprun' }}
         run: ls
