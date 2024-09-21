@@ -72,6 +72,9 @@ our $logfile;  # server log file name, for logmsg
 # logmsg is general message logging subroutine for our test servers.
 #
 sub logmsg {
+    if (!defined($logfile)) {
+        return;
+    }
     my $now;
     # sub second timestamping needs Time::HiRes
     if($Time::HiRes::VERSION) {
