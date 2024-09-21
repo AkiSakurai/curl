@@ -1333,10 +1333,21 @@ sub runnerar {
     }
     my $len=unpack("L", $datalen);
     my $buf;
-    while(! defined ($err = sysread($controllerr{$runnerid}, $buf, $len)) || $err <= 0) {
+    my $nread = 0;
+    while(! defined ($err = sysread($controllerr{$runnerid}, $buf, $len)) || $err <= 0 || $nread < $len) {
         if((!defined $err && ! $!{EINTR}) || (defined $err && $err == 0)) {
             # Runner is likely dead and closed the pipe
             return undef;
+        }
+
+
+        if(defined($err) && $err > 0) {
+            $nread += $err;
+            if($nread >= $len) {
+                last;
+            } else {
+                print("runnerar: read $nread < $len\n");
+            }
         }
         # system call was interrupted, probably by ^C; restart it so we stay in sync
     }
@@ -1348,7 +1359,7 @@ sub runnerar {
         $resarrayref = thaw $buf;
     } or do {
         my $e = $@;
-        print("runneerar went wrong: $e buf $buf\n");
+        print("runneerar went wrong: $e buf $err $len\n");
     };
     # First argument is runner ID
     # TODO: remove this; it's unneeded since it's passed in
