@@ -257,6 +257,7 @@ sub catch_zap {
 }
 $SIG{INT} = \&catch_zap;
 $SIG{TERM} = \&catch_zap;
+$SIG{__DIE__} = \&catch_zap;
 
 sub catch_usr1 {
     print "runtests.pl internal state:\r\n";
@@ -1943,6 +1944,9 @@ sub singletest {
         $singletest_state{$runnerid} = ST_RUN;
 
     } elsif($singletest_state{$runnerid} == ST_RUN) {
+
+        printf "singletest $runnerid $testnum\n";
+
         my ($rid, $error, $logs, $testtimings, $cmdres, $CURLOUT, $tool, $usedvalgrind) = runnerar($runnerid);
         if(!$rid) {
             logmsg "ERROR: runner $runnerid seems to have died\n";
@@ -1950,8 +1954,12 @@ sub singletest {
             return (-1, 0);
         }
         logmsg $logs;
+        printf "singletest: update timming $runnerid $testnum\n";
+
         updatetesttimings($testnum, %$testtimings);
         if($error == -1) {
+            printf "singletest: $error $error $runnerid $testnum\n";
+
             # no further verification will occur
             $timevrfyend{$testnum} = Time::HiRes::time();
             my $err = ignoreresultcode($testnum);
@@ -1963,6 +1971,8 @@ sub singletest {
             return ($err, 0);
         }
         elsif($error == -2) {
+            printf "singletest: $error $error $runnerid $testnum\n";
+
             # fill in the missing timings on error
             timestampskippedevents($testnum);
             # Submit the test case result with the CI environment
@@ -1972,6 +1982,8 @@ sub singletest {
             return ($error, 0);
         }
         elsif($error > 0) {
+            printf "singletest: $error $error $runnerid $testnum\n";
+
             # no further verification will occur
             $timevrfyend{$testnum} = Time::HiRes::time();
             # Submit the test case result with the CI environment
