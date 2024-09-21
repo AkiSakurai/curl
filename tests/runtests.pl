@@ -61,7 +61,6 @@ use strict;
 use warnings FATAL => 'all';
 use 5.006;
 use POSIX qw(strftime);
-use Devel::StackTrace;
 
 # These should be the only variables that might be needed to get edited:
 
@@ -254,8 +253,6 @@ sub singletest_dumplogs {
 sub catch_zap {
     my $signame = shift;
     print "runtests.pl received SIG$signame, exiting\r\n";
-    my $trace = Devel::StackTrace->new;
-    print  "Stack Trace:\n", $trace->as_string;
     $globalabort = 1;
 }
 $SIG{INT} = \&catch_zap;

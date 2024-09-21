@@ -28,7 +28,6 @@ package serverhelp;
 
 use strict;
 use warnings;
-use Devel::StackTrace;
 
 BEGIN {
     use base qw(Exporter);
@@ -74,8 +73,6 @@ our $logfile;  # server log file name, for logmsg
 #
 sub logmsg {
     if (!defined($logfile)) {
-        my $trace = Devel::StackTrace->new;
-        print  "missing $logfile, stack Trace:\n", $trace->as_string;
         return;
     }
     my $now;
