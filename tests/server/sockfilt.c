@@ -549,7 +549,6 @@ static unsigned int WINAPI select_ws_wait_thread(void *lpParameter)
       while(WaitForMultipleObjectsEx(1, handles, FALSE, 0, FALSE)
             == WAIT_TIMEOUT) {
         /* peek into the pipe and retrieve the amount of data available */
-        logmsg("[select_ws_wait_thread] PeekNamedPipe, PIPE: %p", handle);
 
         length = 0;
         if(PeekNamedPipe(handle, NULL, 0, NULL, &length, NULL)) {
