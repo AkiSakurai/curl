@@ -1341,19 +1341,19 @@ sub runnerar {
         # system call was interrupted, probably by ^C; restart it so we stay in sync
     }
 
+    # Decode response values
+    my $resarrayref;
+
     eval {
-        # Decode response values
-        my $resarrayref = thaw $buf;
-
-        # First argument is runner ID
-        # TODO: remove this; it's unneeded since it's passed in
-        unshift @$resarrayref, $runnerid;
-        return @$resarrayref;
+        $resarrayref = thaw $buf;
     } or do {
-        my $eval_error= $@ || "error";
-        logmsg "runnerar: error decoding response: $buf\n";
-    }
-
+        my $e = $@;
+        print("runneerar went wrong: $e buf $buf\n");
+    };
+    # First argument is runner ID
+    # TODO: remove this; it's unneeded since it's passed in
+    unshift @$resarrayref, $runnerid;
+    return @$resarrayref;
 }
 
 ###################################################################
