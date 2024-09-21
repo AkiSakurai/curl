@@ -460,6 +460,7 @@ sub getreplydata {
 sub sockfilt {
     my $l;
     foreach $l (@_) {
+        logmsg "sockfilt $l\n";
         printf SFWRITE "DATA\n%04x\n", length($l);
         print SFWRITE $l;
     }

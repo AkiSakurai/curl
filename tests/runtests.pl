@@ -2981,6 +2981,9 @@ while () {
     if($ridready) {
         # This runner is ready to be serviced
         my $testnum = $runnersrunning{$ridready};
+        my $testnum_if_defined = defined $testnum ? $testnum : "undef";
+        print "Runners: service runners test $testnum_if_defined\n";
+        print "Runners: service runners state: $singletest_state{$ridready}\n" if defined $ridready;
         defined $testnum ||  die "Internal error: test for runner $ridready unknown";
         delete $runnersrunning{$ridready};
         my ($error, $again) = singletest($ridready, $testnum, $countforrunner{$ridready}, $totaltests);
